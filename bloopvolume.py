@@ -2,8 +2,7 @@
 
 # BloobVolume - Volume control with audible and visible notification
 
-import sys
-import argparse
+from argparse import ArgumentParser
 from subprocess import call
 from pulsectl import Pulse
 
@@ -157,7 +156,7 @@ def main():
   """
   entry point to parse command line arguments
   """
-  parser = argparse.ArgumentParser(description='Pulseaudio volume controller')
+  parser = ArgumentParser(description='Pulseaudio volume controller')
   parser.add_argument('action', choices=['up', 'down', 'mute'])
   parser.add_argument('--step', dest='step', type=int, default=DEFAULT_STEP, help='Percentage to change the volume')
   parser.add_argument('--sound', dest='sound', default=DEFAULT_SOUND_FILE, help='Specify a sound file to play')
