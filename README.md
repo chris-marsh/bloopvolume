@@ -2,6 +2,9 @@
 
 A command line volume control with visual and audible desktop notification.
 
+![BloopVolume Notification](/screenshots/screen1.jpg?raw=true "BloopVolume Notification")
+![BloopVolume Mute Notification](/screenshots/screen2.jpg?raw=true "BloopVolume Mute Notification")
+
 ## Why?
 
 There are many volume control scripts out there, but my motivation for writing bloopvolume were:
