@@ -17,10 +17,10 @@ DEFAULT_SOUND_FILE = (
 def call_subprocess(command):
     """
     Run an external program
-  Args:
-    command (list): list of arguments
-  Returns:
-    boolean for success or failure
+    Args:
+        command (list): list of arguments
+    Returns:
+        boolean for success or failure
     """
 
     try:
