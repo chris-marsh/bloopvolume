@@ -9,8 +9,9 @@ A command line volume control with visual and audible desktop notification.
 
 There are many volume control scripts out there, but my motivation for writing bloopvolume were:
 
-1. Able to control the current audio output either speaker or headphone
-2. Play notification sound through the current active audio source
+1. Portable across any linux desktop environment or window manager
+2. Able to control the current audio output either speaker or headphone
+3. Play notification sound through the current active audio source
 
 ## Requirements
 
