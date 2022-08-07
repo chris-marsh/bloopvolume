@@ -79,23 +79,19 @@ def do_action(action, step=DEFAULT_STEP, sound_file=DEFAULT_SOUND_FILE):
     if active_sink == None:
       active_sink = sink_list[0]
 
-    # sink volume float->int percentage and round to nearest step value
-    volume = int(active_sink.volume.value_flat * 100)
-    volume = step * round(volume / step)
+    # round volume to nearest step value
+    volume = step * round((active_sink.volume.value_flat * 100) / step)
     isMute = active_sink.mute == 1
 
     if action == 'up':
-      # increase volume and set with pulse (changing back to float)
       volume += step
       if volume > 150: volume = 150
 
     elif action == 'down':
-      # decrease volume and set with pulse (changing back to float)
       volume -= step
       if volume < 0: volume = 0
 
     elif action == 'mute':
-      # toggle mute status
       isMute = not isMute
       pulse.mute(active_sink, isMute)
 
