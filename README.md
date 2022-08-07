@@ -4,11 +4,10 @@ A command line volume control with visual and audible desktop notification.
 
 ## Why?
 
-There are many volume control scripts out there, but my motivation and aims for writing bloopvolume were:
+There are many volume control scripts out there, but my motivation for writing bloopvolume were:
 
 1. Able to control the current audio output either speaker or headphone
 2. Play notification sound through the current active audio source
-3. My regex skills are awful, so I wanted to use the python module [pulsectl](https://github.com/mk-fg/python-pulse-control)
 
 ## Requirements
 
@@ -61,10 +60,13 @@ keys = [
     ....
 ]
 ```
-## i3
 
+## i3
 ```
 bindsym XF86AudioRaiseVolume exec --no-startup-id /home/user/bloopvolume.py up
 bindsym XF86AudioLowerVolume exec --no-startup-id /home/user/bloopvolume.py down
 bindsym XF86AudioMute exec --no-startup-id /home/user/bloopvolume.py mute
 ```
+## Links
+
+* [python-pulse-control]((https://github.com/mk-fg/python-pulse-control) used in this project to control PulseAudio
