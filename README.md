@@ -73,3 +73,7 @@ bindsym XF86AudioMute exec --no-startup-id /home/user/bloopvolume.py mute
 ## Links
 
 * [python-pulse-control](https://github.com/mk-fg/python-pulse-control) used in this project to control PulseAudio
+
+## Copyright
+
+Copyright 2022 Chris Marsh and contributors (see [LICENSE](/LICENSE.md) for licensing information)
