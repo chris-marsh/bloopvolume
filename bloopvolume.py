@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# BloobVolume - Volume control with audible and visile notification
+
 import sys
 import argparse
 from subprocess import call
@@ -66,8 +68,8 @@ def send_notification(volume, mute):
     return call_subprocess(command)
 
 
-def do_action(action, step, sound_file):
-  with Pulse('volume-increaser') as pulse:
+def do_action(action, step=DEFAULT_STEP, sound_file=DEFAULT_SOUND_FILE):
+  with Pulse('volume-changer') as pulse:
     # get the active sink
     active_sink = None
     sink_list = pulse.sink_list()
@@ -85,30 +87,27 @@ def do_action(action, step, sound_file):
     if action == 'up':
       # increase volume and set with pulse (changing back to float)
       volume += step
-      pulse.mute(active_sink, False)
-      pulse.volume_set_all_chans(active_sink, volume / 100)
-      send_notification(active_sink.volume.value_flat, False)
+      if volume > 150: volume = 150
 
     elif action == 'down':
       # decrease volume and set with pulse (changing back to float)
       volume -= step
       if volume < 0: volume = 0
-      pulse.mute(active_sink, False)
-      pulse.volume_set_all_chans(active_sink, volume / 100)
-      send_notification(active_sink.volume.value_flat, False)
 
     elif action == 'mute':
       # toggle mute status
       isMute = not isMute
       pulse.mute(active_sink, isMute)
-      send_notification(active_sink.volume.value_flat, isMute)
 
     else:
-      print("Unknown action")
       return False
 
     if not isMute:
-      playsound(active_sink.index, DEFAULT_SOUND_FILE)
+      pulse.mute(active_sink, False)
+      pulse.volume_set_all_chans(active_sink, volume / 100)
+      playsound(active_sink.index, sound_file)
+
+    return send_notification(active_sink.volume.value_flat, isMute)
 
 
 def main():
