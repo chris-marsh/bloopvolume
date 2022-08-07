@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
-# BloobVolume - Volume control with audible and visible notification
+# BloopVolume - A command line volume control wth audible & visible
+#               notification.
+
 
 from argparse import ArgumentParser
 from subprocess import call
