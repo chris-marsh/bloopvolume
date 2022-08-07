@@ -42,13 +42,14 @@ def playsound(sink_index, soundfile):
 
 
 def send_notification(volume, mute):
+  command = [
+    "dunstify",
+    "-r", NOTIFICATION_ID,
+    "-u", "normal"]
   if mute:
     mute_symbol='🔇'        # U+1F507
-    command = [
-      "dunstify",           # command to run
+    command += [
       mute_symbol+" Volume: Mute",       # label to show mute
-      "-r", NOTIFICATION_ID,# unique id to reuse same notification as above
-      "-u", "normal",       # normal urgency level
       "-h", "int:value:0"]  # show zero bar to keep notification size
     return call_subprocess(command)
   else:
@@ -58,30 +59,31 @@ def send_notification(volume, mute):
       volume_symbol = '🔉'  # U+1F509
     else:
       volume_symbol = '🔊' # U+1F50A
-    command = [
-      "dunstify",           # command to run
+    command += [
       volume_symbol+" Volume: ",           # label as volume
-      "-r", NOTIFICATION_ID,# unique id to reuse notification
-      "-u", "normal",       # urgency level for notification
       "-h",                 # pass hint and value to show progress bar
       "int:value:{:.0f}".format(volume*100)]
     return call_subprocess(command)
 
 
+def get_active_sink(pulse):
+  active_sink = None
+  sink_list = pulse.sink_list()
+  for sink in sink_list:
+    if sink.state == 'running':
+      active_sink = sink
+  if active_sink == None:
+    active_sink = sink_list[0]
+  return active_sink
+
+
 def do_action(action, step=DEFAULT_STEP, sound_file=DEFAULT_SOUND_FILE):
   with Pulse('volume-changer') as pulse:
-    # get the active sink
-    active_sink = None
-    sink_list = pulse.sink_list()
-    for sink in sink_list:
-      if sink.state == 'running':
-        active_sink = sink
-    if active_sink == None:
-      active_sink = sink_list[0]
+    active_sink = get_active_sink(pulse)
 
     # round volume to nearest step value
     volume = step * round((active_sink.volume.value_flat * 100) / step)
-    isMute = active_sink.mute == 1
+    is_mute = (action == 'mute')
 
     if action == 'up':
       volume += step
@@ -92,18 +94,16 @@ def do_action(action, step=DEFAULT_STEP, sound_file=DEFAULT_SOUND_FILE):
       if volume < 0: volume = 0
 
     elif action == 'mute':
-      isMute = not isMute
-      pulse.mute(active_sink, isMute)
+      is_mute = not (active_sink.mute == 1)
 
     else:
       return False
 
-    if not isMute:
-      pulse.mute(active_sink, False)
-      pulse.volume_set_all_chans(active_sink, volume / 100)
-      playsound(active_sink.index, sound_file)
+    pulse.mute(active_sink, is_mute)
+    pulse.volume_set_all_chans(active_sink, volume / 100)
+    playsound(active_sink.index, sound_file)
 
-    return send_notification(active_sink.volume.value_flat, isMute)
+    return send_notification(active_sink.volume.value_flat, is_mute)
 
 
 def main():
